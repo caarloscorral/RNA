@@ -1,4 +1,5 @@
 import pandas as pd
+from sklearn.utils import shuffle
 data = pd.read_csv("california_housing.csv")
 
 for column in data.columns:
