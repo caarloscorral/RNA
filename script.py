@@ -8,5 +8,7 @@ for column in data.columns:
     data[column] -= min
     data[column] /= minus
 
+data = data.sample(frac=1).reset_index(drop=True)
+
 print(data)
     
