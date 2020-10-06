@@ -10,6 +10,11 @@ for column in data.columns:
     data[column] /= minus
 
 data = data.sample(frac=1).reset_index(drop=True)
+training = data.sample(frac=0.6).reset_index(drop=True)
+validation = data.sample(frac=0.2).reset_index(drop=True)
+test = data.sample(frac=0.2).reset_index(drop=True)
 
-print(data)
+print(training)
+print(validation)
+print(test)
     
