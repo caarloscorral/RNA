@@ -1,5 +1,6 @@
 import pandas as pd
 from sklearn.utils import shuffle
+from sklearn.model_selection import train_test_split
 data = pd.read_csv("california_housing.csv")
 
 for column in data.columns:
@@ -9,12 +10,10 @@ for column in data.columns:
     data[column] -= min
     data[column] /= minus
 
-data = data.sample(frac=1).reset_index(drop=True)
-training = data.sample(frac=0.6).reset_index(drop=True)
-validation = data.sample(frac=0.2).reset_index(drop=True)
-test = data.sample(frac=0.2).reset_index(drop=True)
+training, testing = train_test_split(data, shuffle=True, test_size=0.4)
+testing, validation = train_test_split(testing, shuffle=True, test_size=0.5)
 
 print(training)
+print(testing)
 print(validation)
-print(test)
     
