@@ -1,4 +1,5 @@
 import pandas as pd
+from sklearn.utils import shuffle
 data = pd.read_csv("california_housing.csv")
 
 for column in data.columns:
@@ -8,5 +9,6 @@ for column in data.columns:
     data[column] -= min
     data[column] /= minus
 
-print(data)
+data = shuffle(data)
+
     
