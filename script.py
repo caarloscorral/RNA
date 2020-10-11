@@ -35,7 +35,7 @@ validation = validation.reset_index(drop=True)
 ############################################################# ADALINE ALGORITHM #############################################################
 
 ##### Variables ####
-learning_rate = 0.3
+learning_rate = 0.1
 
 def Adaline_Training(cycles):
     ''' weights[0] = w1       weights[1] = w2       weights[2] = w3       weights[3] = w4
@@ -45,22 +45,22 @@ def Adaline_Training(cycles):
     # Inizializing random weights and threshold
     weights = np.around(np.random.rand(1, 8), 3)
 
-    threshold = random.random() / 1000.0
+    threshold = random.random()
 
     mse_training_list = list()
     mse_validation_list = list()
 
     # Training Adaline by the number of cycles (stop criterion)
     for _ in range(cycles):
-        training_errors = list()
-        validation_errors = list()
+        training_errors = []
+        validation_errors = []
 
         ##### TRAINING ####
         # For each pattern get output and set new weights and threshold
         for pattern in training.values:
             # Getting output
             output = weights @ pattern[0:8]
-            # output += threshold
+            output += threshold
 
             difference = pattern[8] - output
 
@@ -85,7 +85,7 @@ def Adaline_Training(cycles):
         for pattern in validation.values:
             #Getting output
             output = weights @ pattern[0:8]
-            # output += threshold
+            output += threshold
 
             difference = pattern[8] - output
 
@@ -98,13 +98,9 @@ def Adaline_Training(cycles):
         mse_validation = np.sum(vError ** 2)
         mse_validation /= len(validation.values)
         mse_validation_list.append(mse_validation)
-
-        if mse_training < threshold:
-            #break
-            pass
     
     # Printing into screen
-    print(mse_training_list)
+    print(mse_validation_list)
 
 
 def main():
