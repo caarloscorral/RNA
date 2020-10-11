@@ -1,5 +1,6 @@
 # Importing libraries
 import pandas as pd
+import numpy as np
 from sklearn.utils import shuffle
 from sklearn.model_selection import train_test_split
 import random
@@ -36,7 +37,6 @@ validation = validation.reset_index(drop=True)
 ##### Variables ####
 learning_rate = 0.3
 threshold = 0
-weights = list()
 
 def Adaline_Training(cycles):
     ''' weights[0] = w1       weights[1] = w2       weights[2] = w3       weights[3] = w4
@@ -44,8 +44,7 @@ def Adaline_Training(cycles):
         learning_rate = γ                           threshold = θ
         '''
     # Inizializing random weights and threshold
-    for i in range(8):
-        weights.append(round(random.random(), 3))
+    weights = np.around(np.random.rand(1, 8), 3)
 
     threshold = round(random.random(), 3)
 
@@ -53,7 +52,7 @@ def Adaline_Training(cycles):
     mse_validation_list = list()
 
     # Training Adaline by the number of cycles (stop criterion)
-    for cycle in range(1, cycles + 1):
+    for cycle in range(cycles):
         training_errors = list()
         validation_errors = list()
 
@@ -61,19 +60,13 @@ def Adaline_Training(cycles):
         # For each pattern get output and set new weights and threshold
         for pattern in training.values:
             # Getting output
-            output = 0
-            for x in range(len(pattern) - 1):
-                output += weights[x] * pattern[x]
+            output = weights @ pattern[0:8]
             output += threshold
 
             difference = pattern[8] - output
 
             # Setting new weights
-            for x in range(len(pattern)):
-                if x != 8:
-                    weights[x] += learning_rate * difference * pattern[x]
-                else:
-                    threshold += learning_rate * difference
+            weights += learning_rate * difference * pattern[0:8]
             
             # Setting new threshold
             threshold += learning_rate * difference
