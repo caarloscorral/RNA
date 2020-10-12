@@ -1,6 +1,6 @@
 # Importing libraries
 import random
-
+import os
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
@@ -27,14 +27,10 @@ training = training.reset_index(drop=True)
 testing = testing.reset_index(drop=True)
 validation = validation.reset_index(drop=True)
 
-#print(training)
-#print(testing)
-#print(validation)
-
 
 ############################################################# ADALINE ALGORITHM #############################################################
 
-##### Variables ####
+##### Constants ####
 LEARNING_RATE = 0.1
 CYCLES = 20
 
@@ -46,12 +42,13 @@ def Adaline_Training():
     # Inizializing random weights and threshold
     weights = np.around(np.random.rand(9), 3)
 
-    outputs = [[] * len(validation.values)] * CYCLES
+    outputs = list()
     mse_training_list = []
     mse_validation_list = []
 
     # Training Adaline by the number of cycles (stop criterion)
-    for _ in range(CYCLES):
+    for cycle in range(CYCLES):
+        outputs.append(list())
         training_errors = []
         validation_errors = []
 
@@ -92,7 +89,8 @@ def Adaline_Training():
             # Appending pattern error to validation errors list
             validation_errors.append(difference)
 
-            # Saving outputs into outputs table
+            # Saving outputs into outputs list
+            outputs[cycle].append(output)
 
         vError = np.array(validation_errors)
 
@@ -110,20 +108,23 @@ def Adaline_Training():
     print(error_table.to_string(index=False))
 
 
-    # Saving outputs for each pattern into a dataframe
-    
+    # Saving outputs into a dataframe
+    outputs_table = pd.DataFrame(outputs)
 
     # Saving final weights and threshold into a dataframe
     weights_and_threshold_table = pd.DataFrame(weights)
     weights_and_threshold_table = weights_and_threshold_table.T
     weights_and_threshold_table.columns = ["Peso final w1", "Peso final w2", "Peso final w3", "Peso final w4", "Peso final w5", "Peso final w6", "Peso final w7", "Peso final w8", "Umbral final"]
 
-    # Saving errors table, weights and threshold table, and outputs table into a Excel file
+    # Saving errors table, weights and threshold table, and outputs table into a Excel file; checking first if there is an existent file and removing it
+    if os.path.exists("Adaline.xlsx"):
+        os.remove("Adaline.xlsx")
+
     writer = pd.ExcelWriter(r"C:\Users\carlo\OneDrive\Documentos\GitHub\RNA\Adaline.xlsx", engine = 'xlsxwriter')
 
     error_table.to_excel(writer, sheet_name="Errors", index=False, header=True)
     weights_and_threshold_table.to_excel(writer, sheet_name="Final weights", index=False, header=True)
-    #outputs_table.to_excel(writer, sheet_name="Outputs", index=False, header=True)
+    outputs_table.to_excel(writer, sheet_name="Outputs", header=True)
 
     writer.save()
     writer.close()
