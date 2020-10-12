@@ -27,6 +27,11 @@ training = training.reset_index(drop=True)
 testing = testing.reset_index(drop=True)
 validation = validation.reset_index(drop=True)
 
+# Saving training testing and validation sets into a CSV file
+training.to_csv(r"C:\Users\carlo\OneDrive\Documentos\GitHub\RNA\Adaline\Training.csv", index=False)
+testing.to_csv(r"C:\Users\carlo\OneDrive\Documentos\GitHub\RNA\Adaline\Testing.csv", index=False)
+validation.to_csv(r"C:\Users\carlo\OneDrive\Documentos\GitHub\RNA\Adaline\Validation.csv", index=False)
+
 
 ############################################################# ADALINE ALGORITHM #############################################################
 
@@ -116,15 +121,37 @@ def Adaline_Training():
     weights_and_threshold_table = weights_and_threshold_table.T
     weights_and_threshold_table.columns = ["Peso final w1", "Peso final w2", "Peso final w3", "Peso final w4", "Peso final w5", "Peso final w6", "Peso final w7", "Peso final w8", "Umbral final"]
 
-    # Saving errors table, weights and threshold table, and outputs table into a Excel file; checking first if there is an existent file and removing it
+    # Saving errors table, weights and threshold table, and outputs table into Excel adn CSV files; checking first if there are existent files and removing them
     if os.path.exists("Adaline.xlsx"):
         os.remove("Adaline.xlsx")
 
-    writer = pd.ExcelWriter(r"C:\Users\carlo\OneDrive\Documentos\GitHub\RNA\Adaline.xlsx", engine = 'xlsxwriter')
+    elif os.path.exists("Errors.csv"):
+        os.remove("Errors.csv")
+
+    elif os.path.exists("Final weights.csv"):
+        os.remove("Final weights.csv")
+
+    elif os.path.exists("Outputs.csv"):
+        os.remove("Outputs.csv")
+
+    writer = pd.ExcelWriter(r"C:\Users\carlo\OneDrive\Documentos\GitHub\RNA\Adaline\Adaline.xlsx", engine = 'xlsxwriter')
 
     error_table.to_excel(writer, sheet_name="Errors", index=False, header=True)
+    error_table.to_csv(r"C:\Users\carlo\OneDrive\Documentos\GitHub\RNA\Adaline\Errors.csv", index=False)
+
     weights_and_threshold_table.to_excel(writer, sheet_name="Final weights", index=False, header=True)
+    weights_and_threshold_table.to_csv(r"C:\Users\carlo\OneDrive\Documentos\GitHub\RNA\Adaline\Weights_and_threshold.csv", index=False)
+
+    # Denormalize outputs
+    for column in outputs_table.columns:
+        maxx = outputs_table[column].max()
+        minn = outputs_table[column].min()
+        minus = (maxx-minn)
+        outputs_table[column] *= minus
+        outputs_table[column] += minn
+
     outputs_table.to_excel(writer, sheet_name="Outputs", header=True)
+    outputs_table.to_csv(r"C:\Users\carlo\OneDrive\Documentos\GitHub\RNA\Adaline\Outputs.csv", index=False)
 
     writer.save()
     writer.close()
