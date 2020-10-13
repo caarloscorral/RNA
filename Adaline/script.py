@@ -142,9 +142,9 @@ def Adaline_Training(cycles, learning_rate, training):
 
     # Denormalize outputs
     for column in outputs_table.columns:
-        minus = (maxx[column]-minn[column])
+        minus = (maxx["median_house_value"]-minn["median_house_value"])
         outputs_table[column] *= minus
-        outputs_table[column] += minn[column]
+        outputs_table[column] += minn["median_house_value"]
 
     outputs_table.to_excel(writer, sheet_name="Outputs", header=True)
     outputs_table.to_csv(r"Adaline\Outputs\Outputs"+str(learning_rate)+".csv", index=False)
