@@ -9,11 +9,12 @@ from sklearn.model_selection import train_test_split
 
 # Getting data
 data = pd.read_csv(r"Adaline\california_housing.csv")
-
+maxx = {}
+minn = {}
 # Normalize data
 for column in data.columns:
-    maxx = data[column].max()
-    minn = data[column].min()
+    maxx[column] = data[column].max()
+    minn[column] = data[column].min()
     minus = (maxx-minn)
     data[column] -= minn
     data[column] /= minus
@@ -141,11 +142,9 @@ def Adaline_Training(cycles, learning_rate, training):
 
     # Denormalize outputs
     for column in outputs_table.columns:
-        maxx = outputs_table[column].max()
-        minn = outputs_table[column].min()
-        minus = (maxx-minn)
+        minus = (maxx[column]-minn[column])
         outputs_table[column] *= minus
-        outputs_table[column] += minn
+        outputs_table[column] += minn[column]
 
     outputs_table.to_excel(writer, sheet_name="Outputs", header=True)
     outputs_table.to_csv(r"Adaline\Outputs\Outputs"+str(learning_rate)+".csv", index=False)
