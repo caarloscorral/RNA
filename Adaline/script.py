@@ -8,7 +8,7 @@ from sklearn.model_selection import train_test_split
 ################################## PREPROCESSING ###################################
 
 # Getting data
-data = pd.read_csv("california_housing.csv")
+data = pd.read_csv(r"Adaline\california_housing.csv")
 
 # Normalize data
 for column in data.columns:
@@ -19,27 +19,24 @@ for column in data.columns:
     data[column] /= minus
 
 # Getting random training, testing and validation sets
-training, testing = train_test_split(data, shuffle=True, test_size=0.4)
+training_set, testing = train_test_split(data, shuffle=True, test_size=0.4)
 testing, validation = train_test_split(testing, shuffle=True, test_size=0.5)
 
 # Reseting indexes
-training = training.reset_index(drop=True)
+training_set = training_set.reset_index(drop=True)
 testing = testing.reset_index(drop=True)
 validation = validation.reset_index(drop=True)
 
 # Saving training testing and validation sets into a CSV file
-training.to_csv(r"C:\Users\carlo\OneDrive\Documentos\GitHub\RNA\Adaline\Training.csv", index=False)
-testing.to_csv(r"C:\Users\carlo\OneDrive\Documentos\GitHub\RNA\Adaline\Testing.csv", index=False)
-validation.to_csv(r"C:\Users\carlo\OneDrive\Documentos\GitHub\RNA\Adaline\Validation.csv", index=False)
+training_set.to_csv(r"Adaline\Outputs\Training.csv", index=False)
+testing.to_csv(r"Adaline\Outputs\Testing.csv", index=False)
+validation.to_csv(r"Adaline\Outputs\Validation.csv", index=False)
 
 
 ############################################################# ADALINE ALGORITHM #############################################################
 
-##### Constants ####
-LEARNING_RATE = 0.1
-CYCLES = 20
 
-def Adaline_Training():
+def Adaline_Training(cycles, learning_rate, training):
     ''' weights[0] = w1       weights[1] = w2       weights[2] = w3       weights[3] = w4
         weights[4] = w5       weights[5] = w6       weights[6] = w7       weights[7] = w8 
         weights[8] = θ --> threshold                learning_rate = γ
@@ -52,7 +49,7 @@ def Adaline_Training():
     mse_validation_list = []
 
     # Training Adaline by the number of cycles (stop criterion)
-    for cycle in range(CYCLES):
+    for cycle in range(cycles):
         outputs.append(list())
         training_errors = []
         validation_errors = []
@@ -67,10 +64,10 @@ def Adaline_Training():
             difference = pattern[8] - output
 
             # Setting new weights
-            weights[0:8] += LEARNING_RATE * difference * pattern[0:8]
+            weights[0:8] += learning_rate * difference * pattern[0:8]
             
             # Setting new threshold
-            weights[8] += LEARNING_RATE * difference
+            weights[8] += learning_rate * difference
 
             # Appending pattern error to training errors list
             training_errors.append(difference)
@@ -122,25 +119,25 @@ def Adaline_Training():
     weights_and_threshold_table.columns = ["Peso final w1", "Peso final w2", "Peso final w3", "Peso final w4", "Peso final w5", "Peso final w6", "Peso final w7", "Peso final w8", "Umbral final"]
 
     # Saving errors table, weights and threshold table, and outputs table into Excel adn CSV files; checking first if there are existent files and removing them
-    if os.path.exists("Adaline.xlsx"):
-        os.remove("Adaline.xlsx")
+    if os.path.exists(r"Adaline\Outputs\Adaline"+str(learning_rate)+".xlsx"):
+        os.remove(r"Adaline\Outputs\Adaline"+str(learning_rate)+".xlsx")
 
-    elif os.path.exists("Errors.csv"):
-        os.remove("Errors.csv")
+    elif os.path.exists(r"Adaline\Outputs\Errors"+str(learning_rate)+".csv"):
+        os.remove(r"Adaline\Outputs\Errors"+str(learning_rate)+".csv")
 
-    elif os.path.exists("Final weights.csv"):
-        os.remove("Final weights.csv")
+    elif os.path.exists(r"Adaline\Outputs\Final weights"+str(learning_rate)+".csv"):
+        os.remove(r"Adaline\Outputs\Final weights"+str(learning_rate)+".csv")
 
-    elif os.path.exists("Outputs.csv"):
-        os.remove("Outputs.csv")
+    elif os.path.exists(r"Adaline\Outputs\Outputs"+str(learning_rate)+".csv"):
+        os.remove(r"Adaline\Outputs\Outputs"+str(learning_rate)+".csv")
 
-    writer = pd.ExcelWriter(r"C:\Users\carlo\OneDrive\Documentos\GitHub\RNA\Adaline\Adaline.xlsx", engine = 'xlsxwriter')
+    writer = pd.ExcelWriter(r"Adaline\Outputs\Adaline"+str(learning_rate)+".xlsx", engine = 'xlsxwriter')
 
     error_table.to_excel(writer, sheet_name="Errors", index=False, header=True)
-    error_table.to_csv(r"C:\Users\carlo\OneDrive\Documentos\GitHub\RNA\Adaline\Errors.csv", index=False)
+    error_table.to_csv(r"Adaline\Outputs\Errors"+str(learning_rate)+".csv", index=False)
 
     weights_and_threshold_table.to_excel(writer, sheet_name="Final weights", index=False, header=True)
-    weights_and_threshold_table.to_csv(r"C:\Users\carlo\OneDrive\Documentos\GitHub\RNA\Adaline\Weights_and_threshold.csv", index=False)
+    weights_and_threshold_table.to_csv(r"Adaline\Outputs\Weights_and_threshold"+str(learning_rate)+".csv", index=False)
 
     # Denormalize outputs
     for column in outputs_table.columns:
@@ -151,14 +148,32 @@ def Adaline_Training():
         outputs_table[column] += minn
 
     outputs_table.to_excel(writer, sheet_name="Outputs", header=True)
-    outputs_table.to_csv(r"C:\Users\carlo\OneDrive\Documentos\GitHub\RNA\Adaline\Outputs.csv", index=False)
+    outputs_table.to_csv(r"Adaline\Outputs\Outputs"+str(learning_rate)+".csv", index=False)
 
     writer.save()
     writer.close()
 
+    return mse_validation_list
 
 def main():
-    Adaline_Training()
+    errors = []
+    cycles = []
+    for rate in [0.001, 0.01, 0.1, 0.5, 1]:
+        error = Adaline_Training(100, rate, training_set)
+        newCycles = error.index(min(error))+1
+        cycles.append(newCycles)
+        bestError = Adaline_Training(newCycles, rate, training_set)
+        errors.append(min(bestError))
+
+
+    if os.path.exists(r"Adaline\Outputs\Errors.csv"):
+        os.remove(r"Adaline\Outputs\Errors.csv")
+
+    error_table = list(zip([0.001, 0.01, 0.1, 0.5, 1], cycles, errors))
+    error_table = pd.DataFrame(error_table, columns=["Ratio de aprendizaje", "Ciclos optimos (max 100)", "Error de validacion"])
+    error_table.reset_index(drop=True)
+    error_table.to_csv(r"Adaline\Outputs\Errors.csv", index=False)
+
 
     
 if __name__ == "__main__" :
