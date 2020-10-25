@@ -210,7 +210,7 @@ def main():
     errors = []
     cycles = []
     weight_list = []
-    learning_rates = [0.001, 0.01]
+    learning_rates = [0.001, 0.005, 0.01, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 1]
 
     for rate in learning_rates:
         error, weights = Adaline_Training(MAX_CYCLES, rate, training_set)
