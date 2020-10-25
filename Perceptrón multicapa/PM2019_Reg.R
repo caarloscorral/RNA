@@ -87,9 +87,9 @@ outputsTest  <- data.frame(pred= prediccionesTest, obs=  testSet[,salida])
 
 
 #GUARDANDO RESULTADOS
-saveRDS(model,"nnet30-15-30-0.01.rds")
-write.csv2(errors,"finalErrors30-15-30-0.01.csv")
-write.csv2(iterativeErrors,"iterativeErrors30-15-30-0.01.csv")
-write.csv2(outputsTrain,"netOutputsTrain30-15-30-0.01.csv")
-write.csv2(outputsValid,"netOutputsValid30-15-30-0.01.csv")
-write.csv2(outputsTest, "netOutputsTest30-15-30-0.01.csv")
+saveRDS(model,"Outputs/nnet30-15-30-0.01.rds")
+write.csv2(errors,"Outputs/finalErrors30-15-30-0.01.csv")
+write.csv2(iterativeErrors,"Outputs/iterativeErrors30-15-30-0.01.csv")
+write.csv2(outputsTrain,"Outputs/netOutputsTrain30-15-30-0.01.csv")
+write.csv2(outputsValid,"Outputs/netOutputsValid30-15-30-0.01.csv")
+write.csv2(outputsTest, "Outputs/netOutputsTest30-15-30-0.01.csv")
