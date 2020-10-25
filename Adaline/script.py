@@ -34,6 +34,10 @@ training_set.to_csv(r"Adaline\Outputs\Training.csv", index=False)
 testing.to_csv(r"Adaline\Outputs\Testing.csv", index=False)
 validation.to_csv(r"Adaline\Outputs\Validation.csv", index=False)
 
+training_set.to_csv(r"Perceptrón multicapa\Training.csv", index=False)
+testing.to_csv(r"Perceptrón multicapa\Testing.csv", index=False)
+validation.to_csv(r"Perceptrón multicapa\Validation.csv", index=False)
+
 
 ############################################################# ADALINE ALGORITHM #############################################################
 
