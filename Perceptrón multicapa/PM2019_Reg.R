@@ -15,22 +15,10 @@ salida <- ncol (trainSet)   #num de la columna de salida
 
 
 topologias <- list()
-topologias[[1]] <- c(30)
-topologias[[2]] <- c(10,10)
-topologias[[3]] <- c(10,20)
-topologias[[4]] <- c(10,30)
-topologias[[5]] <- c(15,30)
-topologias[[6]] <- c(20,10)
-topologias[[7]] <- c(20,20)
-topologias[[8]] <- c(20,30)
-topologias[[9]] <- c(30,15)
-topologias[[10]] <- c(30,15,30)
-topologias[[11]] <- c(10,10,10)
-topologias[[12]] <- c(10,20,10)
-topologias[[13]] <- c(10,30,10)
-topologias[[14]] <- c(15,30,15)
+topologias[[1]] <- c(10,20,10)
 
-razones <- c(0.001, 0.005, 0.01, 0.02, 0.03, 0.1, 0.5)
+
+razones <- c(0.1)
 
 for (top in topologias) {
         for (razon in razones) {
