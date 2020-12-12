@@ -28,7 +28,7 @@ topologias[[10]] <- c(20, 30)
 topologias[[11]] <- c(30, 15)
 topologias[[12]] <- c(10, 10, 10)
 topologias[[13]] <- c(10, 20, 10)
-topologias[[14]] <- c(10, 30,1 0)
+topologias[[14]] <- c(10, 30, 10)
 topologias[[15]] <- c(15, 30, 15)
 topologias[[16]] <- c(30, 15, 30)
 
