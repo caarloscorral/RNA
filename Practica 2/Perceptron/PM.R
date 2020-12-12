@@ -18,7 +18,7 @@ set.seed(1)
 #CARGA DE LOS DATOS
 # cambiar a fold 2 y 3
 
-fold <- 1
+fold <- 4
 
 
 # usar read.table si los campos est�n separados por espacios o tabuladores. 
